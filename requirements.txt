@@ -1,0 +1,15 @@
+pandas
+numpy
+matplotlib
+plotly
+scikit-learn
+torch
+neuralforecast
+stable-baselines3
+gymnasium
+duckdb
+streamlit
+langgraph
+shap
+yfinance
+kaggle

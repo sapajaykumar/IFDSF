@@ -187,6 +187,22 @@ history = model.fit(
 )
 
 # ----------------------------------------------------
+# Save Training History
+# ----------------------------------------------------
+
+history_df = pd.DataFrame(history.history)
+
+history_df.to_csv(
+    os.path.join(
+        OUTPUT_FOLDER,
+        "training_history.csv"
+    ),
+    index=False
+)
+
+print("Training History Saved")
+
+# ----------------------------------------------------
 # Prediction
 # ----------------------------------------------------
 
@@ -219,6 +235,25 @@ print(f"MAE  : {mae:.4f}")
 print(f"MAPE : {mape:.2f}%")
 
 print(f"R²   : {r2:.4f}")
+
+# ----------------------------------------------------
+# Save Evaluation Metrics
+# ----------------------------------------------------
+
+metrics = pd.DataFrame({
+    "Metric": ["RMSE", "MAE", "MAPE", "R2"],
+    "Value": [rmse, mae, mape, r2]
+})
+
+metrics.to_csv(
+    os.path.join(
+        OUTPUT_FOLDER,
+        "forecast_metrics.csv"
+    ),
+    index=False
+)
+
+print("Evaluation Metrics Saved")
 
 # ----------------------------------------------------
 # Save Model

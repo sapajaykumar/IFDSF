@@ -59,17 +59,23 @@ class ForecastAgent:
 
         response = {
 
-            "agent": self.name,
+                "agent": self.name,
 
-            "forecast": float(latest_prediction),
+                "stock": "AAPL",
 
-            "actual": float(latest_actual),
+                "forecast": float(latest_prediction),
 
-            "metrics": metrics.to_dict(),
+                "actual": float(latest_actual),
 
-            "status": "SUCCESS"
+                "model": "LSTM",
 
-        }
+                "dataset": "Yahoo Finance",
+
+                "metrics": metrics.to_dict(),
+
+                "status": "SUCCESS"
+
+                    }
 
         print("\nForecast Agent Completed Successfully.")
 

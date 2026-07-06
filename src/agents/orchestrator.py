@@ -2,6 +2,14 @@
 --------------------------------------------------------
 IFDSF Research Prototype
 Module : orchestrator.py
+
+Purpose:
+Coordinates all AI agents within the IFDSF
+framework.
+
+Author : Ajay Kumar
+M.Tech (Data Science & AI)
+IIIT Dharwad
 --------------------------------------------------------
 """
 
@@ -13,45 +21,66 @@ class IFDSFOrchestrator:
 
     def __init__(self):
 
+        self.name = "IFDSF Orchestrator"
+
         self.forecast_agent = ForecastAgent()
 
         self.optimization_agent = OptimizationAgent()
 
-    # --------------------------------------------
+    # -------------------------------------------------
 
     def run(self):
 
-        print("\n" + "="*70)
-        print("IFDSF ORCHESTRATOR")
-        print("="*70)
+        print("\n" + "=" * 70)
+        print(self.name)
+        print("=" * 70)
 
-        forecast = self.forecast_agent.run()
+        # -----------------------------
+        # Step 1
+        # -----------------------------
 
-        optimization = self.optimization_agent.run()
+        forecast_response = self.forecast_agent.run()
 
-        print("\nFinal Decision Summary\n")
+        # -----------------------------
+        # Step 2
+        # -----------------------------
 
-        print(f"Forecast      : {forecast['forecast']:.2f}")
+        optimization_response = self.optimization_agent.run()
 
-        print(f"Recommendation: {optimization['recommendation']}")
+        # -----------------------------
+        # Final Summary
+        # -----------------------------
 
-        print(f"Risk Level    : {optimization['risk']}")
+        print("\n" + "=" * 70)
+        print("IFDSF FINAL DECISION")
+        print("=" * 70)
 
-        print(f"Confidence    : {optimization['confidence']}%")
+        print(f"Forecast        : {forecast_response['forecast']:.2f}")
+        print(f"Actual          : {forecast_response['actual']:.2f}")
+
+        print(f"Recommendation  : {optimization_response['recommendation']}")
+        print(f"Risk Level      : {optimization_response['risk']}")
+        print(f"Confidence      : {optimization_response['confidence']}%")
 
         print("\nIFDSF Workflow Completed Successfully.")
 
         return {
 
-            "forecast": forecast,
+            "forecast": forecast_response,
 
-            "optimization": optimization
+            "optimization": optimization_response
 
         }
 
+
+# --------------------------------------------------------
 
 if __name__ == "__main__":
 
     orchestrator = IFDSFOrchestrator()
 
-    orchestrator.run()
+    result = orchestrator.run()
+
+    print("\nReturned Object")
+
+    print(result)

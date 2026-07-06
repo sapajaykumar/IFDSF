@@ -23,20 +23,25 @@ IIIT Dharwad
 """
 
 import os
-from pathlib import Path
 import yfinance as yf
 
 from src.data_pipeline.data_catalog import DATASETS
 
+# --------------------------------------------------------
+# Stocks to Download
+# --------------------------------------------------------
+
+TICKERS = [
+    "AAPL",
+    "MSFT",
+    "TSLA"
+]
 
 # --------------------------------------------------------
 # Create Dataset Folders
 # --------------------------------------------------------
 
 def create_dataset_folders():
-    """
-    Create dataset folders if they do not exist.
-    """
 
     print("\nCreating Dataset Folders...\n")
 
@@ -56,42 +61,32 @@ def create_dataset_folders():
 # --------------------------------------------------------
 
 def download_yahoo_finance(
-    ticker="AAPL",
+    ticker,
     start_date="2020-01-01",
     end_date="2025-01-01"
 ):
-    """
-    Downloads stock market data from Yahoo Finance.
-    """
 
-    print("\nDownloading Yahoo Finance Data...\n")
+    print(f"\nDownloading {ticker} data...\n")
 
     folder = DATASETS["D5"]["folder"]
 
-    file_name = f"{ticker}.csv"
+    file_path = folder / f"{ticker}.csv"
 
-    file_path = folder / file_name
+    data = yf.download(
+        ticker,
+        start=start_date,
+        end=end_date,
+        progress=False,
+        auto_adjust=False
+    )
 
-data = yf.download(
-    ticker,
-    start=start_date,
-    end=end_date,
-    progress=False,
-    auto_adjust=False
-)
+    # Flatten MultiIndex columns if required
+    if hasattr(data.columns, "nlevels") and data.columns.nlevels > 1:
+        data.columns = data.columns.get_level_values(0)
 
-# ----------------------------------------------------
-# Convert MultiIndex columns to normal columns
-# ----------------------------------------------------
-
-if hasattr(data.columns, "nlevels") and data.columns.nlevels > 1:
-    data.columns = data.columns.get_level_values(0)
-
-# Save clean CSV
-data.to_csv(file_path, index_label="Date")
+    data.to_csv(file_path, index_label="Date")
 
     print(f"Dataset Saved : {file_path}")
-
     print(f"Records : {len(data)}")
 
 
@@ -107,7 +102,8 @@ def main():
 
     create_dataset_folders()
 
-    download_yahoo_finance()
+    for ticker in TICKERS:
+        download_yahoo_finance(ticker)
 
     print("\nDownload Completed Successfully.")
 

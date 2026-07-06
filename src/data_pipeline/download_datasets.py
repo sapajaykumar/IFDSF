@@ -72,14 +72,23 @@ def download_yahoo_finance(
 
     file_path = folder / file_name
 
-    data = yf.download(
-        ticker,
-        start=start_date,
-        end=end_date,
-        progress=False
-    )
+data = yf.download(
+    ticker,
+    start=start_date,
+    end=end_date,
+    progress=False,
+    auto_adjust=False
+)
 
-    data.to_csv(file_path)
+# ----------------------------------------------------
+# Convert MultiIndex columns to normal columns
+# ----------------------------------------------------
+
+if hasattr(data.columns, "nlevels") and data.columns.nlevels > 1:
+    data.columns = data.columns.get_level_values(0)
+
+# Save clean CSV
+data.to_csv(file_path, index_label="Date")
 
     print(f"Dataset Saved : {file_path}")
 

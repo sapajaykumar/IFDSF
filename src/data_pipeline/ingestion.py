@@ -14,7 +14,7 @@ IIIT Dharwad
 
 import pandas as pd
 
-from src.data_pipeline.data_catalog import DATASETS
+from data_catalog import DATASETS
 
 
 def load_dataset(ticker):
